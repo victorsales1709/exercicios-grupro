@@ -1,33 +1,43 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <algorithm>
 using namespace std;
 
+bool ok(const vector<int>& v_half, int k, int mid){
+    int count = 0, dif = 0;
+    for(int val : v_half){
+        dif = val - mid;
+        count += dif;
+        if(count > k) return false;
+    }
+    return true;
+    
+}
+
 int main(){
-    vector<int> h;
-    int n, x; 
-    int mv=0; 
-    int area = 0;
+    int n,k,mid,val;
+    cin>>n>>k;
+    vector<int> v(n);
 
-    cin>>n;
-    for(int i=0; i<n; i++){
-        cin>>x;
-        h.push_back(x);
+    for(int i=0; i<n; ++i){
+        cin>>v[i];
     }
 
-    int l = 0;
-    int r = h.size()-1;
+    sort(v.begin(), v.end());
 
-    while(l<r){
-        area = (r-l) * (min(h[l],h[r]));
-        if (area > mv){
-            mv = area;
-        }
-        if(h[l]<h[r]){
-            l++;
-        }
-        else{
-            r--;
+    vector<int> v_half = vector<int>(v.begin(), v.begin()+(n+1)/2);
+
+    int min_val = v_half.front() - k;
+    int max_val = v_half.back();
+
+    while(min_val < max_val){
+        mid = min_val + (max_val - min_val) / 2;
+        if(ok(v_half, k, mid)){
+            max_val = mid;
+        } else {
+            min_val = mid + 1;
         }
     }
 
-    cout<<mv;
+    cout<<max_val;
 }
